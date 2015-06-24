@@ -28,7 +28,7 @@
 			effect: 'default',
 			
 			// since 1.2. fixed positioning not supported by IE6
-			fixed: !$.browser.msie || $.browser.version > 6, 
+			fixed: !/msie/.test(navigator.userAgent.toLowerCase()) || navigator.appVersion > 6, 
 			
 			left: 'center',		
 			load: false, // 1.2
@@ -137,8 +137,8 @@
 				// position & dimensions 
 				var top = conf.top,					
 					 left = conf.left,
-					 oWidth = overlay.outerWidth({margin:true}),
-					 oHeight = overlay.outerHeight({margin:true}); 
+					 oWidth = overlay.outerWidth(true),
+					 oHeight = overlay.outerHeight(true); 
 				
 				if (typeof top == 'string')  {
 					top = top == 'center' ? Math.max((w.height() - oHeight) / 2, 0) : 
@@ -163,7 +163,7 @@
 				
 				// when window is clicked outside overlay, we close
 				if (conf.closeOnClick) {
-					$(document).bind("click." + uid, function(e) { 
+					$(document).on("click." + uid, function(e) { 
 						if (!$(e.target).parents(overlay).length) { 
 							self.close(e); 
 						}
@@ -174,7 +174,7 @@
 				if (conf.closeOnEsc) { 
 
 					// one callback is enough if multiple instances are loaded simultaneously
-					$(document).bind("keydown." + uid, function(e) {
+					$(document).on("keydown." + uid, function(e) {
 						if (e.keyCode == 27) { 
 							self.close(e);	 
 						}
@@ -203,7 +203,7 @@
 				});
 				
 				// unbind the keyboard / clicking actions
-				$(document).unbind("click." + uid).unbind("keydown." + uid);		  
+				$(document).off("click." + uid + " keydown." + uid);		  
 				
 				if (maskConf) {
 					$.mask.close();		
@@ -240,12 +240,12 @@
 				
 			// configuration
 			if ($.isFunction(conf[name])) { 
-				$(self).bind(name, conf[name]); 
+				$(self).on(name, conf[name]); 
 			}
 
 			// API
 			self[name] = function(fn) {
-				if (fn) { $(self).bind(name, fn); }
+				if (fn) { $(self).on(name, fn); }
 				return self;
 			};
 		});

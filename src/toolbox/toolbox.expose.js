@@ -41,7 +41,7 @@
 	function viewport() {
 				
 		// the horror case
-		if ($.browser.msie) {
+		if (/msie/.test(navigator.userAgent.toLowerCase())) {
 			
 			// if there are no scrollbars then use window.height
 			var d = $(document).height(), w = $(window).height();
@@ -116,7 +116,7 @@
 			
 			// esc button
 			if (conf.closeOnEsc) {						
-				$(document).bind("keydown.mask", function(e) {							
+				$(document).on("keydown.mask", function(e) {							
 					if (e.keyCode == 27) {
 						$.mask.close(e);	
 					}		
@@ -125,13 +125,13 @@
 			
 			// mask click closes
 			if (conf.closeOnClick) {
-				mask.bind("click.mask", function(e)  {
+				mask.on("click.mask", function(e)  {
 					$.mask.close(e);		
 				});					
 			}			
 			
 			// resize mask when window is resized
-			$(window).bind("resize.mask", function() {
+			$(window).on("resize.mask", function() {
 				$.mask.fit();
 			});
 			
@@ -169,18 +169,18 @@
 				// onBeforeClose
 				if (call(config.onBeforeClose) === false) { return this; }
 					
-				mask.fadeOut(config.closeSpeed, function()  {					
-					call(config.onClose);					
+				mask.fadeOut(config.closeSpeed, function()  {										
 					if (exposed) {
 						exposed.css({zIndex: overlayIndex});						
 					}				
 					loaded = false;
+					call(config.onClose);
 				});				
 				
 				// unbind various event listeners
-				$(document).unbind("keydown.mask");
-				mask.unbind("click.mask");
-				$(window).unbind("resize.mask");  
+				$(document).off("keydown.mask");
+				mask.off("click.mask");
+				$(window).off("resize.mask");  
 			}
 			
 			return this; 

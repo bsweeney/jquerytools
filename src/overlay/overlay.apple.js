@@ -43,7 +43,7 @@
 			 conf = this.getConf(),
 			 trigger = this.getTrigger(),
 			 self = this,
-			 oWidth = overlay.outerWidth({margin:true}),
+			 oWidth = overlay.outerWidth({true}),
 			 img = overlay.data("img"),
 			 position = conf.fixed ? 'fixed' : 'absolute';  
 		
@@ -99,8 +99,8 @@
 		
 		// begin growing
 		img.animate({			
-			top: overlay.css("top"), 
-			left: overlay.css("left"), 
+			top: pos.top,
+			left: pos.left,
 			width: oWidth}, conf.speed, function() {
 			
 			// set close button and content over the image
